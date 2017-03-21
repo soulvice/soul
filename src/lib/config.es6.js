@@ -9,7 +9,7 @@ import _ from 'lodash'
 import path, { join as pathJoin } from 'path'
 import { existsSync, readFileSync } from 'fs'
 
-import { JarvisError } from './errors'
+import { SoulError } from './errors'
 import { Debug, getParentPath } from './utils'
 
 // internal
@@ -50,7 +50,7 @@ class ConfigurationManager {
     debug(`:: being loading configuration file(s)`);
     if (files.length < 1) {
       debug(`:: failed to specify file(s)`);
-      return new JarvisError({ message: 'specify at least one file to load' });
+      return new SoulError({ message: 'specify at least one file to load' });
     }
 
     let filteredFiles = [ ...files, ...ConfigurationManager.defaultLocations() ]
@@ -60,7 +60,7 @@ class ConfigurationManager {
 
     if (filteredFiles.length < 1) {
       debug(`:: failed to specify existing file(s)`);
-      return new JarvisError({ message: 'make sure specified file path(s) exists' });
+      return new SoulError({ message: 'make sure specified file path(s) exists' });
     }
 
     // load files
@@ -75,7 +75,7 @@ class ConfigurationManager {
         fileData = await readFileSync(file, 'utf8');
       }catch(e) {
         debug(`:: error loading file ${file} - ${e.message}`);
-        result = new JarvisError({ err: e });
+        result = new SoulError({ err: e });
       }
 
       if (fileData && !result) {

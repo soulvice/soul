@@ -93,7 +93,7 @@ var ConfigurationManager = function () {
                 }
 
                 debug(':: failed to specify file(s)');
-                return _context.abrupt('return', new _errors.JarvisError({ message: 'specify at least one file to load' }));
+                return _context.abrupt('return', new _errors.SoulError({ message: 'specify at least one file to load' }));
 
               case 4:
                 filteredFiles = [].concat(files, _toConsumableArray(ConfigurationManager.defaultLocations())).filter(function (file) {
@@ -111,7 +111,7 @@ var ConfigurationManager = function () {
                 }
 
                 debug(':: failed to specify existing file(s)');
-                return _context.abrupt('return', new _errors.JarvisError({ message: 'make sure specified file path(s) exists' }));
+                return _context.abrupt('return', new _errors.SoulError({ message: 'make sure specified file path(s) exists' }));
 
               case 9:
 
@@ -148,7 +148,7 @@ var ConfigurationManager = function () {
                 _context.t0 = _context['catch'](20);
 
                 debug(':: error loading file ' + file + ' - ' + _context.t0.message);
-                result = new _errors.JarvisError({ err: _context.t0 });
+                result = new _errors.SoulError({ err: _context.t0 });
 
               case 30:
 
