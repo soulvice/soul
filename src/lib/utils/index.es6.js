@@ -58,9 +58,9 @@ function safeString(string, options) {
   return string;
 }
 
-function getParentPath() {
+function getParentPath(depth=2) {
   try {
-    return findRoot(caller(2));
+    return findRoot(caller(depth));
   } catch(err) {
     return;
   }

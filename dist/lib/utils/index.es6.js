@@ -29,7 +29,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 } /*
     soul
-
+  
     the soul of your applications in one place.
   */
 
@@ -80,8 +80,10 @@ function safeString(string, options) {
 }
 
 function getParentPath() {
+  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 2;
+
   try {
-    return (0, _findRoot2.default)((0, _caller2.default)(3));
+    return (0, _findRoot2.default)((0, _caller2.default)(depth));
   } catch (err) {
     return;
   }
