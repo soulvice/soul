@@ -56,7 +56,7 @@ class ConfigurationManager {
     let filteredFiles = [ ...files, ...ConfigurationManager.defaultLocations() ]
       .filter(file => existsSync(file))
       .filter(item => /\.[^/.]+$/.exec(item)[0] === '.json');
-    debug(`:: filered out invalid files`);
+    debug(`:: filtered out invalid files`);
 
     if (filteredFiles.length < 1) {
       debug(`:: failed to specify existing file(s)`);

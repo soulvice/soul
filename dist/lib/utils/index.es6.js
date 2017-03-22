@@ -29,7 +29,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 } /*
     soul
-  
+
     the soul of your applications in one place.
   */
 
@@ -81,7 +81,7 @@ function safeString(string, options) {
 
 function getParentPath() {
   try {
-    return (0, _findRoot2.default)((0, _caller2.default)(2));
+    return (0, _findRoot2.default)((0, _caller2.default)(3));
   } catch (err) {
     return;
   }

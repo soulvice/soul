@@ -103,7 +103,7 @@ var ConfigurationManager = function () {
                   );
                 });
 
-                debug(':: filered out invalid files');
+                debug(':: filtered out invalid files');
 
                 if (!(filteredFiles.length < 1)) {
                   _context.next = 9;
