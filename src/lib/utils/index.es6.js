@@ -58,7 +58,7 @@ function safeString(string, options) {
   return string;
 }
 
-function getParentPath(depth=2) {
+function getParentPath(depth=1) {
   try {
     return findRoot(caller(depth));
   } catch(err) {
