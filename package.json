@@ -4,7 +4,7 @@
   "description": "The Soul of Your Application",
   "main": "./dist/index.es6.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha ./test/* --require ./test/runtest.js",
     "build": "babel src --out-dir dist --presets=es2015,stage-3 --plugins=transform-object-rest-spread,transform-async-to-generator,transform-class-properties,syntax-trailing-function-commas",
     "build-clean": "rm -rf dist/*"
   },
@@ -45,6 +45,8 @@
     "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
-    "babel-preset-stage-3": "^6.22.0"
+    "babel-preset-stage-3": "^6.22.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
   }
 }

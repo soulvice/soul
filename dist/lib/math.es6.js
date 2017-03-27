@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -33,11 +33,8 @@ var funcs = (_funcs = {
     return !undefined.isEven(v);
   },
   power: function power(v, x) {
-    var ret = 0;
-    for (var i = 0; i <= x; i++) {
-      ret = ret * v;
-    }
-    return ret;
+    var y = Math.pow(Math.abs(x), x);
+    return x < 0 ? -y : y;
   },
   factorial: function factorial(v) {
     return v * (v - 1);
@@ -66,24 +63,50 @@ var funcs = (_funcs = {
   sqrt: function sqrt(v) {
     return Math.sqrt(v);
   }
-}, _defineProperty(_funcs, "log", function log(v) {
+}, _defineProperty(_funcs, 'log', function log(v) {
   return Math.log(v);
-}), _defineProperty(_funcs, "log2", function log2(v) {
+}), _defineProperty(_funcs, 'log2', function log2(v) {
   return Math.log2(v);
-}), _defineProperty(_funcs, "log10", function log10(v) {
+}), _defineProperty(_funcs, 'log10', function log10(v) {
   return Math.log10(v);
-}), _defineProperty(_funcs, "logB", function logB(v, b) {
-  return Math.log10(b) / Math.log10(v);
-}), _defineProperty(_funcs, "pythag", function pythag(x, y) {
+}), _defineProperty(_funcs, 'logB', function logB(v, b) {
+  return Math.log1p(b) / Math.log1p(v);
+}), _defineProperty(_funcs, 'pythag', function pythag(mathStr) {
+  //a=2; b=5
+  var matchReg = /((a|b|c)|!=|([0-9\.]+)|![\;])/g;
   var ret = 0;
-  nums.forEach(function (n) {
-    return ret += n * n;
-  });
-  return Math.sqrt(ret);
-}), _defineProperty(_funcs, "cbrt", function cbrt(x) {
-  var y = Math.pow(Math.abs(x), 1 / 3);
-  return x < 0 ? -y : y;
-}), _defineProperty(_funcs, "xrt", function xrt(x, r) {
+  var matches = mathStr.match(matchReg);
+  var va = null,
+      vb = null,
+      vc = null;
+
+  for (var i = 0; i < matches.length; i++) {
+    var v = matches[i];
+    if (typeof v === 'string') {
+      if (v === 'a') {
+        va = parseInt(matches[++i]);
+      } else if (v === 'b') {
+        vb = parseInt(matches[++i]);
+      } else if (v === 'c') {
+        vc = parseInt(matches[++i]);
+      }
+    }
+  }
+
+  if (va !== null && vb !== null && vc !== null) {
+    return undefined;
+  }
+
+  if (vc === null) {
+    return Math.sqrt(Math.pow(Math.abs(va), 2) + Math.pow(Math.abs(vb), 2));
+  } else if (va === null) {
+    return Math.sqrt(Math.pow(Math.abs(vc), 2) - Math.pow(Math.abs(vb), 2));
+  } else if (vb === null) {
+    return Math.sqrt(Math.pow(Math.abs(vc), 2) - Math.pow(Math.abs(va), 2));
+  }
+
+  return undefined;
+}), _defineProperty(_funcs, 'xrt', function xrt(x, r) {
   var y = Math.pow(Math.abs(x), 1 / r);
   return x < 0 ? -y : y;
 }), _funcs);
