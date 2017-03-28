@@ -91,6 +91,8 @@ function getParentPath() {
 
 function Debug(name) {
   var parentPath = getParentPath();
+  console.log('Debug for parentPath: ' + parentPath);
+
   var alias, pkg;
 
   try {
