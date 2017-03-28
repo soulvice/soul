@@ -40,15 +40,6 @@ var exportVals = {
     math: _math2.default
 };
 
-Object.defineProperty(exportVals, 'config', {
-    enumerable: true,
-    configurable: true,
-    get: function get() {
-        configSingleton = configSingleton || new ConfigurationManager();
-        return configSingleton;
-    }
-});
-
 exports.errors = _errors2.default;
 exports.logger = _logger2.default;
 exports.utils = _utils2.default;
@@ -59,9 +50,19 @@ Object.defineProperty(exports, 'config', {
     enumerable: true,
     configurable: true,
     get: function get() {
-        configSingleton = configSingleton || new ConfigurationManager();
+        configSingleton = configSingleton || new _config2.default();
         return configSingleton;
     }
 });
 
+Object.defineProperty(exportVals, 'config', {
+    enumerable: true,
+    configurable: true,
+    get: function get() {
+        configSingleton = configSingleton || new _config2.default();
+        return configSingleton;
+    }
+});
+
+// export all features as 'default'
 exports.default = exportVals;
