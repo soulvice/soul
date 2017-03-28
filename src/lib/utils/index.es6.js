@@ -58,7 +58,7 @@ function safeString(string, options) {
   return string;
 }
 
-function getParentPath(depth=1) {
+function getParentPath(depth=2) {
   try {
     return findRoot(caller(depth));
   } catch(err) {
@@ -69,7 +69,7 @@ function getParentPath(depth=1) {
 function Debug(name) {
   var parentPath = getParentPath();
   console.log(`Debug for parentPath: ${parentPath}`);
-  
+
   var alias, pkg;
 
   try {
