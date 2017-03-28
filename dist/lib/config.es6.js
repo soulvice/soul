@@ -35,7 +35,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // internal
-var singleton = null;
 var debug = (0, _utils.Debug)('configuration');
 
 /*
@@ -344,8 +343,4 @@ var ConfigurationManager = function () {
   return ConfigurationManager;
 }();
 
-// create and export singleton configuration manager
-
-
-singleton = singleton || new ConfigurationManager();
-exports.default = singleton;
+exports.default = ConfigurationManager;

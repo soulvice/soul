@@ -1,9 +1,9 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.math = exports.utils = exports.logger = exports.errors = exports.config = undefined;
+exports.math = exports.utils = exports.logger = exports.errors = undefined;
 
 var _config = require('./lib/config');
 
@@ -27,21 +27,41 @@ var _math2 = _interopRequireDefault(_math);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var exportVals = {
-  config: _config2.default,
-  errors: _errors2.default,
-  logger: _logger2.default,
-  utils: _utils2.default,
-  math: _math2.default
-}; /*
-     soul
-   
-     the soul of your applications in one place.
-   */
+var configSingleton = void 0; /*
+                                soul
+                              
+                                the soul of your applications in one place.
+                              */
 
-exports.default = exportVals;
-exports.config = _config2.default;
+var exportVals = {
+    errors: _errors2.default,
+    logger: _logger2.default,
+    utils: _utils2.default,
+    math: _math2.default
+};
+
+Object.defineProperty(exportVals, 'config', {
+    enumerable: true,
+    configurable: true,
+    get: function get() {
+        configSingleton = configSingleton || new ConfigurationManager();
+        return configSingleton;
+    }
+});
+
 exports.errors = _errors2.default;
 exports.logger = _logger2.default;
 exports.utils = _utils2.default;
 exports.math = _math2.default;
+
+
+Object.defineProperty(exports, 'config', {
+    enumerable: true,
+    configurable: true,
+    get: function get() {
+        configSingleton = configSingleton || new ConfigurationManager();
+        return configSingleton;
+    }
+});
+
+exports.default = exportVals;

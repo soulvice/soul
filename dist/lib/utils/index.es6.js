@@ -80,7 +80,7 @@ function safeString(string, options) {
 }
 
 function getParentPath() {
-  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 2;
 
   try {
     return (0, _findRoot2.default)((0, _caller2.default)(depth));

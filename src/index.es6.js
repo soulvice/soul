@@ -10,19 +10,40 @@ import logger from './lib/logger'
 import utils from './lib/utils'
 import math from './lib/math'
 
+let configSingleton;
+
 const exportVals = {
-  config,
   errors,
   logger,
   utils,
   math,
 }
 
-export default exportVals
 export {
-  config,
   errors,
   logger,
   utils,
   math,
 }
+
+Object.defineProperty(exports, 'config', {
+    enumerable: true,
+    configurable: true,
+    get: function get() {
+        configSingleton = configSingleton || new ConfigurationManager();
+        return configSingleton;
+    }
+});
+
+Object.defineProperty(exportVals, 'config', {
+    enumerable: true,
+    configurable: true,
+    get: function get() {
+        configSingleton = configSingleton || new ConfigurationManager();
+        return configSingleton;
+    }
+});
+
+
+// export all features as 'default'
+export default exportVals

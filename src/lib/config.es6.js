@@ -13,7 +13,6 @@ import { SoulError } from './errors'
 import { Debug, getParentPath } from './utils'
 
 // internal
-let singleton = null;
 const debug = Debug('configuration');
 
 /*
@@ -33,7 +32,7 @@ function pathSplit(key, separator) {
     config.get(<[nested]key>)
     config.set(<[nested]key>, <value>)
 */
-class ConfigurationManager {
+export default class ConfigurationManager {
   constructor() {
     debug(`:: creating configuration manager`);
 
@@ -201,8 +200,3 @@ class ConfigurationManager {
     return [ pathJoin(getParentPath(), '/config.json') ]
   }
 }
-
-
-// create and export singleton configuration manager
-singleton = singleton || new ConfigurationManager()
-export default singleton
