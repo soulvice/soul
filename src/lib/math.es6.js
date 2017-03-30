@@ -25,6 +25,7 @@ const funcs = {
   pi: () => Math.PI,
   min: (...nums) => Math.min.apply(null, nums),
   max: (...nums) => Math.max.apply(null, nums),
+  randomRange: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
   sqrt: (v) => Math.sqrt(v),
   log: (v) => Math.log(v),
   log2: (v) => Math.log2(v),

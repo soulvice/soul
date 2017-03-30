@@ -60,6 +60,9 @@ var funcs = (_funcs = {
 
     return Math.max.apply(null, nums);
   },
+  randomRange: function randomRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
   sqrt: function sqrt(v) {
     return Math.sqrt(v);
   }
