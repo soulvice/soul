@@ -28,15 +28,15 @@ var _caller = require('caller');
 
 var _caller2 = _interopRequireDefault(_caller);
 
-var _math = require('../math');
-
-var _math2 = _interopRequireDefault(_math);
-
 var _crypto = require('crypto');
 
 var _crypto2 = _interopRequireDefault(_crypto);
 
 var _fs = require('fs');
+
+var _math = require('../math');
+
+var _math2 = _interopRequireDefault(_math);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,10 +45,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Utils = function () {
   function Utils() {
     _classCallCheck(this, Utils);
+
+    this.ONE_HOUR_S = 3600;
+    this.ONE_DAY_S = 86400;
+    this.ONE_MONTH_S = 2628000;
+    this.SIX_MONTH_S = 15768000;
+    this.ONE_YEAR_S = 31536000;
+    this.FIVE_MINUTES_MS = 300000;
+    this.ONE_HOUR_MS = 3600000;
+    this.ONE_DAY_MS = 86400000;
+    this.ONE_WEEK_MS = 604800000;
+    this.ONE_MONTH_MS = 2628000000;
+    this.SIX_MONTH_MS = 15768000000;
+    this.ONE_YEAR_MS = 31536000000;
   }
+
+  /*
+    constants
+  */
+
 
   _createClass(Utils, [{
     key: 'uid',
+
+
+    /*
+      generating values
+    */
     value: function uid(len) {
       var buf = [],
           chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -107,7 +130,7 @@ var Utils = function () {
   }, {
     key: 'Debug',
     value: function Debug(name) {
-      var parentPath = getParentPath(2);
+      var parentPath = this.getParentPath(2);
       console.log('Debug for parentPath: ' + parentPath);
 
       var alias, pkg;
@@ -140,6 +163,11 @@ var Utils = function () {
       }
       return false;
     }
+
+    /*
+      compress folder
+    */
+
   }, {
     key: 'zipFolder',
     value: function zipFolder(folderToZip, destination, callback) {
@@ -159,21 +187,57 @@ var Utils = function () {
       archive.pipe(output);
       archive.finalize();
     }
+
+    /*
+      Base64
+    */
+
+  }, {
+    key: 'encodeBase64URLsafe',
+    value: function encodeBase64URLsafe(base64String) {
+      return base64String.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    // Decode url safe base64 encoding and add padding ('=')
+
+  }, {
+    key: 'decodeBase64URLsafe',
+    value: function decodeBase64URLsafe(base64String) {
+      base64String = base64String.replace(/-/g, '+').replace(/_/g, '/');
+      while (base64String.length % 4) {
+        base64String += '=';
+      }
+      return base64String;
+    }
+  }, {
+    key: 'shuffleArray',
+    value: function shuffleArray(array) {
+      var self = this;
+      var newArray = [];
+      var blacklist = [];
+
+      oldArray.forEach(function (item) {
+        var pos = self.randomRange(0, array.length);
+        // insert item at position 'pos' from 'array' to 'newArray'
+        // add 'pos' to 'blacklist'
+        // if exists in 'blacklist' repeat until not-exists
+      });
+    }
+  }, {
+    key: 'generateAssetHash',
+    get: function get() {
+      return _crypto2.default.createHash('md5').update(this.version.full + Date.now()).digest('hex').substring(0, 10);
+    }
   }, {
     key: 'version',
     get: function get() {
-      var parentPath = getParentPath(2);
+      var parentPath = this.getParentPath(2);
       var pkg = require(parentPath + '/package.json');
 
       return {
         full: pkg.version,
         safe: pkg.version.match(/^(\d+\.)?(\d+)/)[0]
       };
-    }
-  }, {
-    key: 'generateAssetHash',
-    get: function get() {
-      return _crypto2.default.createHash('md5').update(Utils.version().full + Date.now()).digest('hex').substring(0, 10);
     }
   }]);
 
@@ -186,8 +250,5 @@ var Utils = function () {
 
 
 var singleton = null;
-(function () {
-  singleton = singleton || new Utils();
-})();
-
+singleton = singleton || new Utils();
 exports.default = singleton;

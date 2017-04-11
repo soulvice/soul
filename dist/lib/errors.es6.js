@@ -170,10 +170,6 @@ var _errorsTemplate = {
   MaintenanceError: {
     statusCode: 503,
     message: 'The server is temporarily dow n for maintenance.'
-  },
-  WebhookRevocationError: {
-    statusCode: 503,
-    message: 'Webhook is no longer available.'
   }
 };
 
@@ -181,6 +177,9 @@ var _errorsTemplate = {
     Create Error Classes as extensions of 'SoulviceError'
 */
 var errors = {};
+// add the 'SoulError' for exportation reasons
+errors['SoulError'] = SoulError;
+
 Object.getOwnPropertyNames(_errorsTemplate).forEach(function (errorProp) {
   errors[errorProp] = function (_SoulError) {
     _inherits(_class, _SoulError);
@@ -203,7 +202,5 @@ Object.getOwnPropertyNames(_errorsTemplate).forEach(function (errorProp) {
     return _class;
   }(SoulError);
 });
-
-errors['SoulError'] = SoulError;
 
 exports.default = errors;

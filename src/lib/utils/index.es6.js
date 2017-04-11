@@ -191,11 +191,5 @@ class Utils {
   export
 */
 var singleton = null;
-exports.default = Object.defineProperty(exports, 'config', {
-    enumerable: true,
-    configurable: true,
-    get: function get() {
-        singleton = singleton || new Utils();
-        return singleton;
-    }
-});
+singleton = singleton || new Utils();
+export default singleton;

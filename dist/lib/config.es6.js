@@ -26,6 +26,8 @@ var _errors = require('./errors');
 
 var _utils = require('./utils');
 
+var _utils2 = _interopRequireDefault(_utils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -35,15 +37,16 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // internal
-var debug = (0, _utils.Debug)('configuration');
+var debug = _utils2.default.Debug('configuration');
+var _private = {};
 
 /*
   function
 */
-function pathSplit(key, separator) {
+_private.pathSplit = function (key, separator) {
   separator = separator || ':';
   return key == null ? [] : key.split(separator);
-}
+};
 
 /*
   configuration manager
@@ -225,7 +228,7 @@ var ConfigurationManager = function () {
     key: 'set',
     value: function set(key, value) {
       var target = this._store;
-      var path = pathSplit(key, ':');
+      var path = _private.pathSplit(key, ':');
 
       if (path.length === 0) {
         //
@@ -266,7 +269,7 @@ var ConfigurationManager = function () {
     key: 'get',
     value: function get(key) {
       var target = this._store;
-      var path = pathSplit(key, ':');
+      var path = _private.pathSplit(key, ':');
 
       //
       // Scope into the object to get the appropriate nested context
@@ -304,7 +307,7 @@ var ConfigurationManager = function () {
     value: function clear(key) {
       var target = this._store;
       var value = target;
-      var path = pathSplit(key, this.logicalSeparator);
+      var path = _private.pathSplit(key, this.logicalSeparator);
 
       //
       // Remove the key from the set of `mtimes` (modified times)
@@ -336,7 +339,7 @@ var ConfigurationManager = function () {
   }], [{
     key: 'defaultLocations',
     value: function defaultLocations() {
-      return [(0, _path.join)((0, _utils.getParentPath)(), '/config.json')];
+      return [(0, _path.join)(_utils2.default.getParentPath(), '/config.json')];
     }
   }]);
 

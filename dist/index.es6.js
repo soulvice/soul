@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.math = exports.utils = exports.logger = exports.errors = undefined;
+exports.utils = exports.math = exports.logger = exports.errors = undefined;
 
 var _config = require('./lib/config');
 
@@ -36,14 +36,14 @@ var configSingleton = void 0; /*
 var exportVals = {
     errors: _errors2.default,
     logger: _logger2.default,
-    utils: _utils2.default,
-    math: _math2.default
+    math: _math2.default,
+    utils: _utils2.default
 };
 
 exports.errors = _errors2.default;
 exports.logger = _logger2.default;
-exports.utils = _utils2.default;
 exports.math = _math2.default;
+exports.utils = _utils2.default;
 
 
 Object.defineProperty(exports, 'config', {
