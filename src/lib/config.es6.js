@@ -10,15 +10,16 @@ import path, { join as pathJoin } from 'path'
 import { existsSync, readFileSync } from 'fs'
 
 import { SoulError } from './errors'
-import { Debug, getParentPath } from './utils'
+import utils from './utils'
 
 // internal
-const debug = Debug('configuration');
+const debug = utils.Debug('configuration');
+const _private = {};
 
 /*
   function
 */
-function pathSplit(key, separator) {
+_private.pathSplit = function (key, separator) {
   separator = separator || ':';
   return key == null ? [] : key.split(separator);
 }
@@ -96,7 +97,7 @@ export default class ConfigurationManager {
    */
   set(key, value) {
     let target = this._store;
-    let path = pathSplit(key, ':');
+    let path = _private.pathSplit(key, ':');
 
     if (path.length === 0) {
       //
@@ -136,7 +137,7 @@ export default class ConfigurationManager {
 
   get(key) {
     let target = this._store;
-    let path = pathSplit(key, ':');
+    let path = _private.pathSplit(key, ':');
 
     //
     // Scope into the object to get the appropriate nested context
@@ -168,7 +169,7 @@ export default class ConfigurationManager {
   clear(key) {
     let target = this._store;
     let value = target;
-    let path = pathSplit(key, this.logicalSeparator);
+    let path = _private.pathSplit(key, this.logicalSeparator);
 
     //
     // Remove the key from the set of `mtimes` (modified times)
@@ -197,6 +198,6 @@ export default class ConfigurationManager {
     static functions
   */
   static defaultLocations() {
-    return [ pathJoin(getParentPath(), '/config.json') ]
+    return [ pathJoin(utils.getParentPath(), '/config.json') ]
   }
 }

@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Utils = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        soul
@@ -33,6 +32,12 @@ var _math = require('../math');
 
 var _math2 = _interopRequireDefault(_math);
 
+var _crypto = require('crypto');
+
+var _crypto2 = _interopRequireDefault(_crypto);
+
+var _fs = require('fs');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43,17 +48,6 @@ var Utils = function () {
   }
 
   _createClass(Utils, [{
-    key: 'version',
-    get: function get() {
-      var parentPath = getParentPath(2);
-      var pkg = require(parentPath + '/package.json');
-
-      return {
-        full: pkg.version,
-        safe: pkg.version.match(/^(\d+\.)?(\d+)/)[0]
-      };
-    }
-  }], [{
     key: 'uid',
     value: function uid(len) {
       var buf = [],
@@ -146,6 +140,41 @@ var Utils = function () {
       }
       return false;
     }
+  }, {
+    key: 'zipFolder',
+    value: function zipFolder(folderToZip, destination, callback) {
+      var archiver = require('archiver'),
+          output = fs.createWriteStream(destination),
+          archive = archiver.create('zip', {});
+
+      output.on('close', function () {
+        callback(null, archive.pointer());
+      });
+
+      archive.on('error', function (err) {
+        callback(err, null);
+      });
+
+      archive.directory(folderToZip, '/');
+      archive.pipe(output);
+      archive.finalize();
+    }
+  }, {
+    key: 'version',
+    get: function get() {
+      var parentPath = getParentPath(2);
+      var pkg = require(parentPath + '/package.json');
+
+      return {
+        full: pkg.version,
+        safe: pkg.version.match(/^(\d+\.)?(\d+)/)[0]
+      };
+    }
+  }, {
+    key: 'generateAssetHash',
+    get: function get() {
+      return _crypto2.default.createHash('md5').update(Utils.version().full + Date.now()).digest('hex').substring(0, 10);
+    }
   }]);
 
   return Utils;
@@ -156,5 +185,9 @@ var Utils = function () {
 */
 
 
-exports.default = Utils;
-exports.Utils = Utils;
+var singleton = null;
+(function () {
+  singleton = singleton || new Utils();
+})();
+
+exports.default = singleton;

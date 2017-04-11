@@ -1,4 +1,4 @@
-import math from '../src/lib/math'
+import { math } from '../src'
 import { expect } from 'chai'
 
 describe('#math - Pythagorean theorem', () => {

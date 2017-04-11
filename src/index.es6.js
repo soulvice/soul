@@ -16,15 +16,15 @@ let configSingleton;
 const exportVals = {
   errors,
   logger,
-  utils,
   math,
+  utils,
 }
 
 export {
   errors,
   logger,
-  utils,
   math,
+  utils,
 }
 
 Object.defineProperty(exports, 'config', {

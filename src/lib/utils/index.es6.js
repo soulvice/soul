@@ -9,10 +9,33 @@ import unidecode from 'unidecode'
 import _Debug from 'debug'
 import findRoot from 'find-root'
 import caller from 'caller'
+import crypto from 'crypto'
+import { createWriteStream } from 'fs'
+
 import math from '../math'
 
 class Utils {
-  static uid(len) {
+
+  /*
+    constants
+  */
+  ONE_HOUR_S =          3600;
+  ONE_DAY_S =          86400;
+  ONE_MONTH_S =      2628000;
+  SIX_MONTH_S =     15768000;
+  ONE_YEAR_S =      31536000;
+  FIVE_MINUTES_MS =   300000;
+  ONE_HOUR_MS =      3600000;
+  ONE_DAY_MS =      86400000;
+  ONE_WEEK_MS =    604800000;
+  ONE_MONTH_MS =  2628000000;
+  SIX_MONTH_MS = 15768000000;
+  ONE_YEAR_MS =  31536000000;
+
+  /*
+    generating values
+  */
+  uid(len) {
     var buf = [],
        chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
        charlen = chars.length,
@@ -24,7 +47,11 @@ class Utils {
     return buf.join('');
   }
 
-  static safeString(string, options) {
+  get generateAssetHash() {
+    return (crypto.createHash('md5').update(this.version.full + Date.now()).digest('hex')).substring(0, 10);
+  }
+
+  safeString(string, options) {
     options = options || {};
 
     // Handle the £ symbol separately, since it needs to be removed before the unicode conversion.
@@ -56,7 +83,7 @@ class Utils {
     return string;
   }
 
-  static getParentPath(depth=1) {
+  getParentPath(depth=1) {
     try {
       return findRoot(caller(depth));
     } catch(err) {
@@ -64,8 +91,8 @@ class Utils {
     }
   }
 
-  static Debug(name) {
-    var parentPath = getParentPath(2);
+  Debug(name) {
+    var parentPath = this.getParentPath(2);
     console.log(`Debug for parentPath: ${parentPath}`);
 
     var alias, pkg;
@@ -87,7 +114,7 @@ class Utils {
   }
 
   get version() {
-    const parentPath = getParentPath(2);
+    const parentPath = this.getParentPath(2);
     const pkg = require(parentPath + '/package.json');
 
     return {
@@ -96,7 +123,7 @@ class Utils {
     }
   }
 
-  static normalizePort(val) {
+  normalizePort(val) {
     var port = parseInt(val, 10);
     if (isNaN(port)) {
       // named pipe
@@ -108,13 +135,67 @@ class Utils {
     }
     return false;
   }
+
+  /*
+    compress folder
+  */
+  zipFolder(folderToZip, destination, callback) {
+    let archiver = require('archiver'),
+      output = fs.createWriteStream(destination),
+      archive = archiver.create('zip', {});
+
+    output.on('close', function () {
+      callback(null, archive.pointer());
+    });
+
+    archive.on('error', function (err) {
+      callback(err, null);
+    });
+
+    archive.directory(folderToZip, '/');
+    archive.pipe(output);
+    archive.finalize();
+  }
+
+  /*
+    Base64
+  */
+  encodeBase64URLsafe(base64String) {
+    return base64String.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  // Decode url safe base64 encoding and add padding ('=')
+  decodeBase64URLsafe(base64String) {
+    base64String = base64String.replace(/-/g, '+').replace(/_/g, '/');
+    while (base64String.length % 4) {
+      base64String += '=';
+    }
+    return base64String;
+  }
+
+  shuffleArray(array) {
+    let self = this;
+    let newArray = [];
+    let blacklist = [];
+
+    oldArray.forEach(item => {
+      let pos = self.randomRange(0,array.length);
+      // insert item at position 'pos' from 'array' to 'newArray'
+      // add 'pos' to 'blacklist'
+      // if exists in 'blacklist' repeat until not-exists
+    });
+  }
 }
 
 /*
   export
 */
-export default Utils
-
-export {
-  Utils
-}
+var singleton = null;
+exports.default = Object.defineProperty(exports, 'config', {
+    enumerable: true,
+    configurable: true,
+    get: function get() {
+        singleton = singleton || new Utils();
+        return singleton;
+    }
+});
