@@ -131,7 +131,6 @@ var Utils = function () {
     key: 'Debug',
     value: function Debug(name) {
       var parentPath = this.getParentPath(2);
-      console.log('Debug for parentPath: ' + parentPath);
 
       var alias, pkg;
 

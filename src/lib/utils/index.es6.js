@@ -91,9 +91,8 @@ class Utils {
     }
   }
 
-  Debug(name) {
-    var parentPath = this.getParentPath(2);
-    console.log(`Debug for parentPath: ${parentPath}`);
+  Debug(name, depth=2) {
+    var parentPath = this.getParentPath(depth);
 
     var alias, pkg;
 
