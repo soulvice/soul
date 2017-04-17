@@ -130,9 +130,7 @@ var Utils = function () {
   }, {
     key: 'Debug',
     value: function Debug(name) {
-      var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-
-      var parentPath = this.getParentPath(depth);
+      var parentPath = this.getParentPath(2);
 
       var alias, pkg;
 

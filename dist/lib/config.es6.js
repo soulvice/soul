@@ -37,7 +37,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // internal
-var debug = _utils2.default.Debug('configuration', 1);
+//const debug = utils.Debug('configuration',1);
+var debug = function debug() {};
 var _private = {};
 
 /*

@@ -6,7 +6,7 @@
 
 
 import { isString } from 'lodash';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 
 export class SoulError extends Error {
   constructor(options) {
