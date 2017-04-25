@@ -10,6 +10,7 @@ import errors from './lib/errors'
 import logger from './lib/logger'
 import utils from './lib/utils'
 import math from './lib/math'
+import events from './lib/events'
 
 let configSingleton;
 
@@ -18,6 +19,7 @@ const exportVals = {
   logger,
   math,
   utils,
+  events,
 }
 
 export {
@@ -25,6 +27,7 @@ export {
   logger,
   math,
   utils,
+  events,
 }
 
 Object.defineProperty(exports, 'config', {

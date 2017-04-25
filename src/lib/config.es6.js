@@ -13,8 +13,7 @@ import { SoulError } from './errors'
 import utils from './utils'
 
 // internal
-//const debug = utils.Debug('configuration',1);
-const debug = () => {};
+const debug = utils.Debug('configuration');
 const _private = {};
 
 /*

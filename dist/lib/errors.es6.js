@@ -9,9 +9,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = require('lodash');
 
-var _uuid = require('uuid');
+var _nodeUuid = require('node-uuid');
 
-var _uuid2 = _interopRequireDefault(_uuid);
+var _nodeUuid2 = _interopRequireDefault(_nodeUuid);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,7 +52,7 @@ var SoulError = exports.SoulError = function (_Error) {
     _this.errorType = 'InternalServerError';
     _this.level = 'normal';
     _this.message = 'The server has encountered an error.';
-    _this.id = _uuid2.default.v1();
+    _this.id = _nodeUuid2.default.v1();
 
     /**
      * custom overrides
