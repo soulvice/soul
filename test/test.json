@@ -1,0 +1,17 @@
+{
+  "url": "http://sully.io",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 3000,
+    "useSSL": false
+  },
+
+  "ssh": {
+    "addr": "user@192.168.0.1"
+  },
+
+  "paths": {
+    "content": "@/content",
+    "ssl": "@content/data/ssl"
+  }
+}

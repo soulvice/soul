@@ -2,6 +2,15 @@
   soul
 
   the soul of your applications in one place.
+
+
+  Special Characters:
+    - Paths
+      @ - root path(where package.json is located)(must be trailed by a slash)
+      @<string> - specified path(must be trailed by a slash)
+      #NOTE
+      - Path that is being referenced/used must be defined before call
+
 */
 
 
@@ -23,7 +32,6 @@ _private.pathSplit = function (key, separator) {
   separator = separator || ':';
   return key == null ? [] : key.split(separator);
 }
-
 
 /*
   configuration manager
@@ -65,6 +73,44 @@ export default class ConfigurationManager {
 
     // load files
     let results = [];
+    let parsedFileNames = {
+      '@': utils.getParentPath(),
+    };
+
+    let fileParser = async (data) => {
+      // it key equals null then top level
+      // path replacer '@'
+      let regMatcher = /([\@]{1})([a-zA-Z0-9\.\-\_]+)?(?:[\/]{1})/;
+      await Object.keys(data).forEach(async (item) => {
+        if (_.isString(data[item])) {
+          if (regMatcher.test(data[item])) {
+            let foundMatch = regMatcher.exec(data[item]);
+
+            // loop up replacement
+            if (foundMatch[1] === '@') {
+              // check existance of match
+              if (foundMatch[2] !== undefined) {
+                // #TODO
+              }
+
+
+              // replace match
+              // if index '2' === undefined means its just '@' so place it with root path
+              // else replace it with defined value
+              if (parsedFileNames[foundMatch[2]?foundMatch[2]:foundMatch[1]]) {
+                data[item] = data[item].replace(regMatcher, parsedFileNames[foundMatch[2]?foundMatch[2]:foundMatch[1]]+'/');
+                if (!parsedFileNames[item]) {
+                  parsedFileNames[item] = data[item];
+                }
+              }
+            }
+          }
+        }else if (_.isObject(data[item])) {
+          data[item] = await fileParser(data[item],item);
+        }
+      });
+      return data;
+    }
 
     for (let file of filteredFiles) {
       debug(`:: begin load file ${file}`);
@@ -73,13 +119,16 @@ export default class ConfigurationManager {
 
       try {
         fileData = await readFileSync(file, 'utf8');
+        fileData = await JSON.parse(fileData);
+        fileData = await fileParser(fileData);
+        console.log(fileData);
       }catch(e) {
         debug(`:: error loading file ${file} - ${e.message}`);
         result = new SoulError({ err: e });
       }
 
       if (fileData && !result) {
-        this._store = _.extend(this._store, JSON.parse(fileData));
+        this._store = _.extend(this._store, fileData);
         debug(`:: loaded file ${file}`);
       }
 
@@ -192,6 +241,10 @@ export default class ConfigurationManager {
     key = path[i];
     delete target[key];
     return true;
+  }
+
+  makePathsAbsolute(key) {
+
   }
 
   /*

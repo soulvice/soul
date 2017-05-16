@@ -10,6 +10,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        soul
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        the soul of your applications in one place.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Special Characters:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         - Paths
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @ - root path(where package.json is located)(must be trailed by a slash)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @<string> - specified path(must be trailed by a slash)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           #NOTE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           - Path that is being referenced/used must be defined before call
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _lodash = require('lodash');
@@ -76,26 +85,28 @@ var ConfigurationManager = function () {
   _createClass(ConfigurationManager, [{
     key: 'load',
     value: function () {
-      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+        var _this = this;
+
         for (var _len = arguments.length, files = Array(_len), _key = 0; _key < _len; _key++) {
           files[_key] = arguments[_key];
         }
 
-        var filteredFiles, results, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, file, result, fileData;
+        var filteredFiles, results, parsedFileNames, fileParser, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, file, result, fileData;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 debug(':: being loading configuration file(s)');
 
                 if (!(files.length < 1)) {
-                  _context.next = 4;
+                  _context3.next = 4;
                   break;
                 }
 
                 debug(':: failed to specify file(s)');
-                return _context.abrupt('return', new _errors.SoulError({ message: 'specify at least one file to load' }));
+                return _context3.abrupt('return', new _errors.SoulError({ message: 'specify at least one file to load' }));
 
               case 4:
                 filteredFiles = [].concat(files, _toConsumableArray(ConfigurationManager.defaultLocations())).filter(function (file) {
@@ -108,26 +119,119 @@ var ConfigurationManager = function () {
                 debug(':: filtered out invalid files');
 
                 if (!(filteredFiles.length < 1)) {
-                  _context.next = 9;
+                  _context3.next = 9;
                   break;
                 }
 
                 debug(':: failed to specify existing file(s)');
-                return _context.abrupt('return', new _errors.SoulError({ message: 'make sure specified file path(s) exists' }));
+                return _context3.abrupt('return', new _errors.SoulError({ message: 'make sure specified file path(s) exists' }));
 
               case 9:
 
                 // load files
                 results = [];
+                parsedFileNames = {
+                  '@': _utils2.default.getParentPath()
+                };
+
+                fileParser = function () {
+                  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(data) {
+                    var regMatcher;
+                    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            // it key equals null then top level
+                            // path replacer '@'
+                            regMatcher = /([\@]{1})([a-zA-Z0-9\.\-\_]+)?(?:[\/]{1})/;
+                            _context2.next = 3;
+                            return Object.keys(data).forEach(function () {
+                              var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee(item) {
+                                var foundMatch;
+                                return regeneratorRuntime.wrap(function _callee$(_context) {
+                                  while (1) {
+                                    switch (_context.prev = _context.next) {
+                                      case 0:
+                                        if (!_lodash2.default.isString(data[item])) {
+                                          _context.next = 4;
+                                          break;
+                                        }
+
+                                        if (regMatcher.test(data[item])) {
+                                          foundMatch = regMatcher.exec(data[item]);
+
+                                          // loop up replacement
+
+                                          if (foundMatch[1] === '@') {
+                                            // check existance of match
+                                            if (foundMatch[2] !== undefined) {}
+                                            // #TODO
+
+
+                                            // replace match
+                                            // if index '2' === undefined means its just '@' so place it with root path
+                                            // else replace it with defined value
+                                            if (parsedFileNames[foundMatch[2] ? foundMatch[2] : foundMatch[1]]) {
+                                              data[item] = data[item].replace(regMatcher, parsedFileNames[foundMatch[2] ? foundMatch[2] : foundMatch[1]] + '/');
+                                              if (!parsedFileNames[item]) {
+                                                parsedFileNames[item] = data[item];
+                                              }
+                                            }
+                                          }
+                                        }
+                                        _context.next = 8;
+                                        break;
+
+                                      case 4:
+                                        if (!_lodash2.default.isObject(data[item])) {
+                                          _context.next = 8;
+                                          break;
+                                        }
+
+                                        _context.next = 7;
+                                        return fileParser(data[item], item);
+
+                                      case 7:
+                                        data[item] = _context.sent;
+
+                                      case 8:
+                                      case 'end':
+                                        return _context.stop();
+                                    }
+                                  }
+                                }, _callee, _this);
+                              }));
+
+                              return function (_x2) {
+                                return _ref3.apply(this, arguments);
+                              };
+                            }());
+
+                          case 3:
+                            return _context2.abrupt('return', data);
+
+                          case 4:
+                          case 'end':
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2, _this);
+                  }));
+
+                  return function fileParser(_x) {
+                    return _ref2.apply(this, arguments);
+                  };
+                }();
+
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context.prev = 13;
+                _context3.prev = 15;
                 _iterator = filteredFiles[Symbol.iterator]();
 
-              case 15:
+              case 17:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context.next = 35;
+                  _context3.next = 44;
                   break;
                 }
 
@@ -136,79 +240,91 @@ var ConfigurationManager = function () {
                 debug(':: begin load file ' + file);
                 result = null;
                 fileData = null;
-                _context.prev = 20;
-                _context.next = 23;
+                _context3.prev = 22;
+                _context3.next = 25;
                 return (0, _fs.readFileSync)(file, 'utf8');
 
-              case 23:
-                fileData = _context.sent;
-                _context.next = 30;
+              case 25:
+                fileData = _context3.sent;
+                _context3.next = 28;
+                return JSON.parse(fileData);
+
+              case 28:
+                fileData = _context3.sent;
+                _context3.next = 31;
+                return fileParser(fileData);
+
+              case 31:
+                fileData = _context3.sent;
+
+                console.log(fileData);
+                _context3.next = 39;
                 break;
 
-              case 26:
-                _context.prev = 26;
-                _context.t0 = _context['catch'](20);
+              case 35:
+                _context3.prev = 35;
+                _context3.t0 = _context3['catch'](22);
 
-                debug(':: error loading file ' + file + ' - ' + _context.t0.message);
-                result = new _errors.SoulError({ err: _context.t0 });
+                debug(':: error loading file ' + file + ' - ' + _context3.t0.message);
+                result = new _errors.SoulError({ err: _context3.t0 });
 
-              case 30:
+              case 39:
 
                 if (fileData && !result) {
-                  this._store = _lodash2.default.extend(this._store, JSON.parse(fileData));
+                  this._store = _lodash2.default.extend(this._store, fileData);
                   debug(':: loaded file ' + file);
                 }
 
                 results.push({ file: file, result: result });
 
-              case 32:
-                _iteratorNormalCompletion = true;
-                _context.next = 15;
-                break;
-
-              case 35:
-                _context.next = 41;
-                break;
-
-              case 37:
-                _context.prev = 37;
-                _context.t1 = _context['catch'](13);
-                _didIteratorError = true;
-                _iteratorError = _context.t1;
-
               case 41:
-                _context.prev = 41;
-                _context.prev = 42;
+                _iteratorNormalCompletion = true;
+                _context3.next = 17;
+                break;
+
+              case 44:
+                _context3.next = 50;
+                break;
+
+              case 46:
+                _context3.prev = 46;
+                _context3.t1 = _context3['catch'](15);
+                _didIteratorError = true;
+                _iteratorError = _context3.t1;
+
+              case 50:
+                _context3.prev = 50;
+                _context3.prev = 51;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 44:
-                _context.prev = 44;
+              case 53:
+                _context3.prev = 53;
 
                 if (!_didIteratorError) {
-                  _context.next = 47;
+                  _context3.next = 56;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 47:
-                return _context.finish(44);
+              case 56:
+                return _context3.finish(53);
 
-              case 48:
-                return _context.finish(41);
+              case 57:
+                return _context3.finish(50);
 
-              case 49:
-                return _context.abrupt('return', results);
+              case 58:
+                return _context3.abrupt('return', results);
 
-              case 50:
+              case 59:
               case 'end':
-                return _context.stop();
+                return _context3.stop();
             }
           }
-        }, _callee, this, [[13, 37, 41, 49], [20, 26], [42,, 44, 48]]);
+        }, _callee3, this, [[15, 46, 50, 58], [22, 35], [51,, 53, 57]]);
       }));
 
       function load() {
@@ -331,6 +447,9 @@ var ConfigurationManager = function () {
       delete target[key];
       return true;
     }
+  }, {
+    key: 'makePathsAbsolute',
+    value: function makePathsAbsolute(key) {}
 
     /*
       static functions
