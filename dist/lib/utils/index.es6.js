@@ -34,6 +34,10 @@ var _crypto2 = _interopRequireDefault(_crypto);
 
 var _fs = require('fs');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _math = require('../math');
 
 var _math2 = _interopRequireDefault(_math);
@@ -121,8 +125,28 @@ var Utils = function () {
     value: function getParentPath() {
       var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 
+      // need to check of module
+
+      // the world isnt read for recusrive root finding.....one day
+      /*let recursive = (path) => {
+        let root = findRoot(calledBy);
+        // make this recursive
+        if (root === findRoot()) {
+          root = recursive(path.resolve(root,'../'));
+        }
+         return root;
+      }*/
+
       try {
-        return (0, _findRoot2.default)((0, _caller2.default)(depth));
+        var calledBy = (0, _caller2.default)(depth);
+
+        var root = (0, _findRoot2.default)(calledBy);
+        // make this recursive
+        if (root === (0, _findRoot2.default)()) {
+          root = (0, _findRoot2.default)(_path2.default.resolve(root, '../'));
+        }
+
+        return root;
       } catch (err) {
         return;
       }

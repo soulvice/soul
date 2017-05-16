@@ -11,6 +11,7 @@ import findRoot from 'find-root'
 import caller from 'caller'
 import crypto from 'crypto'
 import { createWriteStream } from 'fs'
+import path from 'path'
 
 import math from '../math'
 

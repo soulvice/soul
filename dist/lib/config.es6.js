@@ -231,7 +231,7 @@ var ConfigurationManager = function () {
 
               case 17:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context3.next = 44;
+                  _context3.next = 43;
                   break;
                 }
 
@@ -256,19 +256,17 @@ var ConfigurationManager = function () {
 
               case 31:
                 fileData = _context3.sent;
-
-                console.log(fileData);
-                _context3.next = 39;
+                _context3.next = 38;
                 break;
 
-              case 35:
-                _context3.prev = 35;
+              case 34:
+                _context3.prev = 34;
                 _context3.t0 = _context3['catch'](22);
 
                 debug(':: error loading file ' + file + ' - ' + _context3.t0.message);
                 result = new _errors.SoulError({ err: _context3.t0 });
 
-              case 39:
+              case 38:
 
                 if (fileData && !result) {
                   this._store = _lodash2.default.extend(this._store, fileData);
@@ -277,54 +275,54 @@ var ConfigurationManager = function () {
 
                 results.push({ file: file, result: result });
 
-              case 41:
+              case 40:
                 _iteratorNormalCompletion = true;
                 _context3.next = 17;
                 break;
 
-              case 44:
-                _context3.next = 50;
+              case 43:
+                _context3.next = 49;
                 break;
 
-              case 46:
-                _context3.prev = 46;
+              case 45:
+                _context3.prev = 45;
                 _context3.t1 = _context3['catch'](15);
                 _didIteratorError = true;
                 _iteratorError = _context3.t1;
 
-              case 50:
+              case 49:
+                _context3.prev = 49;
                 _context3.prev = 50;
-                _context3.prev = 51;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 53:
-                _context3.prev = 53;
+              case 52:
+                _context3.prev = 52;
 
                 if (!_didIteratorError) {
-                  _context3.next = 56;
+                  _context3.next = 55;
                   break;
                 }
 
                 throw _iteratorError;
 
+              case 55:
+                return _context3.finish(52);
+
               case 56:
-                return _context3.finish(53);
+                return _context3.finish(49);
 
               case 57:
-                return _context3.finish(50);
-
-              case 58:
                 return _context3.abrupt('return', results);
 
-              case 59:
+              case 58:
               case 'end':
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[15, 46, 50, 58], [22, 35], [51,, 53, 57]]);
+        }, _callee3, this, [[15, 45, 49, 57], [22, 34], [50,, 52, 56]]);
       }));
 
       function load() {
