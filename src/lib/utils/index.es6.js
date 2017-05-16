@@ -84,8 +84,29 @@ class Utils {
   }
 
   getParentPath(depth=1) {
+    // need to check of module
+
+    // the world isnt read for recusrive root finding.....one day
+    /*let recursive = (path) => {
+      let root = findRoot(calledBy);
+      // make this recursive
+      if (root === findRoot()) {
+        root = recursive(path.resolve(root,'../'));
+      }
+
+      return root;
+    }*/
+
     try {
-      return findRoot(caller(depth));
+      let calledBy = caller(depth);
+
+      let root = findRoot(calledBy);
+      // make this recursive
+      if (root === findRoot()) {
+        root = findRoot(path.resolve(root,'../'));
+      }
+
+      return root;
     } catch(err) {
       return;
     }

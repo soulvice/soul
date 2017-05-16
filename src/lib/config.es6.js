@@ -121,7 +121,6 @@ export default class ConfigurationManager {
         fileData = await readFileSync(file, 'utf8');
         fileData = await JSON.parse(fileData);
         fileData = await fileParser(fileData);
-        console.log(fileData);
       }catch(e) {
         debug(`:: error loading file ${file} - ${e.message}`);
         result = new SoulError({ err: e });
