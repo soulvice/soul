@@ -1,6 +1,6 @@
 {
   "name": "soul",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2",
   "description": "The Soul of Your Application",
   "main": "./dist/index.es6.js",
   "scripts": {
