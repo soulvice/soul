@@ -1,0 +1,43 @@
+{
+  "name": "soul",
+  "version": "0.0.1",
+  "description": "the soul of the application",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/* --require ./test/runtest.js",
+    "build": "babel src --out-dir dist --presets=es2015,stage-3 --plugins=transform-object-rest-spread,transform-async-to-generator,transform-class-properties,syntax-trailing-function-commas",
+    "build-clean": "rm -rf dist/*"
+  },
+  "author": "Soulvice",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-core": "^6.24.0",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-syntax-trailing-function-commas": "^6.22.0",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.23.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-stage-3": "^6.22.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "archiver": "^1.3.0",
+    "bunyan": "^1.8.9",
+    "caller": "^1.0.1",
+    "crypto": "0.0.3",
+    "debug": "^2.6.3",
+    "find-root": "^1.0.0",
+    "fs": "0.0.1-security",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.0",
+    "node-uuid": "^1.4.7",
+    "path": "^0.12.7",
+    "prettyjson": "^1.2.1",
+    "stream": "0.0.2",
+    "unidecode": "^0.1.8"
+  }
+}
