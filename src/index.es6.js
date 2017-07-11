@@ -19,6 +19,8 @@ import server from './lib/server'
 // crypto
 import crypto from './lib/crypto'
 
+const debug = require('debug')('soul');
+
 const internal = {};
 const exporter = {
   //config: config,
@@ -29,6 +31,7 @@ const exporter = {
   crypto: crypto,
 };
 
+debug(`:: add config to export list`)
 Object.defineProperty(exporter, 'config', {
   get: function get() {
     internal.configSingleton = internal.configSingleton || new config();
@@ -40,6 +43,7 @@ Object.defineProperty(exporter, 'config', {
   dirty non-es6 hack
 */
 Object.keys(exporter).forEach(x => {
+  debug(`:: exporting ${x}`)
   Object.defineProperty(exports, x, {
     get: function () {
       return exporter[x];
@@ -47,4 +51,5 @@ Object.keys(exporter).forEach(x => {
   });
 });
 
+debug(`:: exporting default`)
 export default exporter
