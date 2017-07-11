@@ -19,15 +19,22 @@ import server from './lib/server'
 // crypto
 import crypto from './lib/crypto'
 
-
+const internal = {};
 const exporter = {
-  config: config,
+  //config: config,
   utils: utils,
   errors: errors,
   math: math,
   server: server,
   crypto: crypto,
 };
+
+Object.defineProperty(exporter, 'config', {
+  get: function get() {
+    internal.configSingleton = internal.configSingleton || new config();
+    return internal.configSingleton;
+  }
+})
 
 /*
   dirty non-es6 hack
