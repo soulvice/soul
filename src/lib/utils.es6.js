@@ -106,6 +106,19 @@ external.getParentPath = (depth=1) => {
   }
 }
 
+Object.defineProperty(external, 'getPackageJSON', {
+  get: function get() {
+    var parentPath = external.getParentPath(2);
+    let pkg = {};
+    try {
+      pkg = require(parentPath + '/package.json');
+    } catch (err) {
+      pkg = {};
+    }
+    return pkg;
+  }
+});
+
 external.Debug = (name) => {
   var parentPath = external.getParentPath(2);
 
@@ -216,6 +229,168 @@ external.array.flatten = external.flattenArray = (arr) => {
   return arr.reduce(
     (a, b) => a.concat(Array.isArray(b) ? external.flattenArray(b) : b), []
   );
+}
+
+external.nextTick = (cb) => {
+  return (...args) => {
+    process.nextTick(() => {
+      cb.apply(null, args);
+    });
+  }
+}
+
+external.clone = (obj, seen) => {
+
+  if (typeof obj !== 'object' ||
+    obj === null) {
+
+    return obj;
+  }
+
+  seen = seen || new Map();
+
+  const lookup = seen.get(obj);
+  if (lookup) {
+    return lookup;
+  }
+
+  let newObj;
+  let cloneDeep = false;
+
+  if (!Array.isArray(obj)) {
+    if (Buffer.isBuffer(obj)) {
+      newObj = new Buffer(obj);
+    }
+    else if (obj instanceof Date) {
+      newObj = new Date(obj.getTime());
+    }
+    else if (obj instanceof RegExp) {
+      newObj = new RegExp(obj);
+    }
+    else {
+      const proto = Object.getPrototypeOf(obj);
+      if (proto &&
+        proto.isImmutable) {
+
+        newObj = obj;
+      }
+      else {
+        newObj = Object.create(proto);
+        cloneDeep = true;
+      }
+    }
+  }
+  else {
+    newObj = [];
+    cloneDeep = true;
+  }
+
+  seen.set(obj, newObj);
+
+  if (cloneDeep) {
+    const keys = Object.getOwnPropertyNames(obj);
+    for (let i = 0; i < keys.length; ++i) {
+      const key = keys[i];
+      const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+      if (descriptor &&
+          (descriptor.get ||
+           descriptor.set)) {
+
+        Object.defineProperty(newObj, key, descriptor);
+      }
+      else {
+        newObj[key] = external.clone(obj[key], seen);
+      }
+    }
+  }
+
+  return newObj;
+};
+
+/*
+  generate a random string
+*/
+external.randomString = (size) => {
+  const buffer = external.raondomBits((size + 1) * 6);
+  if (buffer instanceof Error) {
+    return buffer;
+  }
+
+  const string = buffer.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
+  return string.slice(0, size);
+}
+
+/*
+  generate a random string of digits
+*/
+external.randomDigits = (size) => {
+    const buffer = external.randomBits(size * 8);
+    if (buffer instanceof Error) {
+      return buffer;
+    }
+
+    const digits = [];
+    for (let i=0; i<buffer.length; i++) {
+      digits.push(Math.floor(buffer[i]/25.6));
+    }
+    return digits.join('');
+}
+
+/*
+  generate a random buffer of bits
+*/
+external.randomBits = (bits) => {
+  if (!bits || bits < 0) {
+    return Error('Invalid random bits count');
+  }
+
+  const bytes = Math.ceil(bits / 8);
+  try {
+    return crypto.randomBytes(bytes);
+  }catch(e) {
+    return Error('Failed generating random bits: '+e.message);
+  }
+}
+
+/*
+  compare two strings using fixed time algorithm (to prevvent times-based analysis of MAC digest match)
+*/
+external.fixedTimeComparisonString = (a, b) =>{
+  if (typeof a !== 'string' || typeof b !== 'string') {
+    return false;
+  }
+
+  let mismatch = (a.length === b.length) ? 0 : 1;
+  if (mismatch) {
+    b = a;
+  }
+
+  for (let i=0; i<a.length; ++i){
+    const ac = a.charCodeAt(i);
+    const bc = b.charCodeAt(i);
+    mismatch |= (ac ^ bc);
+  }
+
+  return (mismatch === 0);
+}
+
+external.fixedTimeComparisonBuffer = (a, b) => {
+  if (!(a instanceof Buffer) || !(b instanceof Buffer)) {
+    return false;
+  }
+
+  let mismatch = (a.length === b.length) ? 0 : 1;
+  if (mismatch) {
+    b = a;
+  }
+
+  for (let i=0; i<a.length; i++) {
+    const ac = a.readInt8(i);
+    const bc = b.readInt8(i);
+    mismatch |= (ac ^ bc);
+  }
+
+  return (mismatch === 0);
 }
 
 /*
