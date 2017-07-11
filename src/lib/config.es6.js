@@ -11,7 +11,7 @@ import path, { join as pathJoin } from 'path'
 import { existsSync, readFileSync } from 'fs'
 
 import { SoulError } from './errors'
-import { Debug } from './utils'
+import { Debug, getParentPath } from './utils'
 
 // internal
 const debug = Debug('configuration');
@@ -67,7 +67,7 @@ export default class ConfigurationManager {
     // load files
     let results = [];
     let parsedFileNames = {
-      '@': utils.getParentPath(),
+      '@': getParentPath(),
     };
 
     let fileParser = async (data) => {
@@ -243,6 +243,6 @@ export default class ConfigurationManager {
     static functions
   */
   static defaultLocations() {
-    return [ pathJoin(utils.getParentPath(), '/config.json') ]
+    return [ pathJoin(getParentPath(), '/config.json') ]
   }
 }
