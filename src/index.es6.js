@@ -34,14 +34,16 @@ Object.defineProperty(exporter, 'config', {
     internal.configSingleton = internal.configSingleton || new config();
     return internal.configSingleton;
   }
-})
+});
 
 /*
   dirty non-es6 hack
 */
 Object.keys(exporter).forEach(x => {
   Object.defineProperty(exports, x, {
-    value: exporter[x]
+    get: function () {
+      return exporter[x];
+    }
   });
 });
 
