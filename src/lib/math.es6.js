@@ -72,7 +72,7 @@ const funcs = {
   }
 }
 
-Object.keys(funcs).forEach(func => {
+Object.getOwnPropertyNames(funcs).forEach(func => {
   Object.defineProperty(exports, func, {
     value: funcs[func]
   });

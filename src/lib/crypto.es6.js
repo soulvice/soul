@@ -447,7 +447,7 @@ internal.stringify = (object) => {
   }
 }
 
-Object.keys(external).forEach(e => {
+Object.getOwnPropertyNames(external).forEach(e => {
   Object.defineProperty(exports, e, {
     value: external[e]
   });

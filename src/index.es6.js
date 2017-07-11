@@ -42,12 +42,10 @@ Object.defineProperty(exporter, 'config', {
 /*
   dirty non-es6 hack
 */
-Object.keys(exporter).forEach(x => {
+Object.getOwnPropertyNames(exporter).forEach(x => {
   debug(`:: exporting ${x}`)
   Object.defineProperty(exports, x, {
-    get: function () {
-      return exporter[x];
-    }
+    value: exporter[x]
   });
 });
 

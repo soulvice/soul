@@ -397,7 +397,7 @@ external.fixedTimeComparisonBuffer = (a, b) => {
   dirty non-ES6-hack for
   export <item>
 */
-Object.keys(external).forEach(e => {
+Object.getOwnPropertyNames(external).forEach(e => {
   Object.defineProperty(exports, e, {
     value: external[e]
   });
