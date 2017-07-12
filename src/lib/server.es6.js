@@ -40,10 +40,10 @@ export default class Server {
   async start() {
     const self = this;
     return new Promise((resolve, reject) => {
-      self._http = self._rootApp.listen(self.opts.port, self.opts.host);
+      self._http = self._rootApp.listen(self._opts.port, self._opts.host);
 
       self._http.on('listening', () => {
-        debug(`:: server started on port ${self.opts.port} (${self._uuid})`);
+        debug(`:: server started on port ${self._opts.port} (${self._uuid})`);
         resolve(self);
       });
 
@@ -64,7 +64,7 @@ export default class Server {
           const pkgName = (utils.getPackageJSON && (utils.getPackageJSON.name || utils.getPackageJSON.alias)) || 'undefined';
           svErr = errors.SoulError({
             message: `Address already in use (EADDRINUSE).`,
-            context: `Address already in use on port ${self.opts.port}.`,
+            context: `Address already in use on port ${self._opts.port}.`,
             help: `Make sure there isn\'t already an instance of ${pkgName} running.`
           });
         }else{
