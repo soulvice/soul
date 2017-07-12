@@ -45,7 +45,7 @@ Object.defineProperty(exporter, 'config', {
 Object.getOwnPropertyNames(exporter).forEach(x => {
   debug(`:: exporting ${x}`)
   Object.defineProperty(exports, x, {
-    value: exporter[x]
+    get: function () { return exporter[x]; }
   });
 });
 
