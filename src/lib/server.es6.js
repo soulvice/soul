@@ -6,22 +6,18 @@
 
 */
 
-/*
-
-  Jarvis
-
-  @author: Soulvice
-  @date: 07-07-2017
-
-*/
-
 
 import utils from './utils'
 import errors from './errors'
 
 const debug = utils.Debug('server');
 
-export class Server {
+export default class Server {
+  static OTPS = {
+    HTTP: 1,
+    HTTPS: 2
+  }
+
   constructor(app=null, opts={}) {
     this._connections = {};
     this._connectionId = 0;
@@ -116,8 +112,4 @@ export class Server {
       }
     });
   }
-}
-
-export default {
-  Server
 }

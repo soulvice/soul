@@ -235,10 +235,6 @@ export default class ConfigurationManager {
     return true;
   }
 
-  makePathsAbsolute(key) {
-
-  }
-
   /*
     static functions
   */
