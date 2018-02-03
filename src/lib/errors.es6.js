@@ -150,7 +150,7 @@ let _errorsTemplate = {
 
 
 /*
-    Create Error Classes as extensions of 'SoulviceError'
+    Create Error Classes as extensions of 'SoulError'
 */
 var errors = {};
 // add the 'SoulError' for exportation reasons
@@ -167,6 +167,12 @@ Object.getOwnPropertyNames(_errorsTemplate).forEach((errorProp) => {
 
       Object.getOwnPropertyNames(_errorsTemplate[errorProp]).forEach((item) => {
         self[item] = _errorsTemplate[errorProp][item];
+      });
+
+      // apply custom overrides of variables
+      // (ie. message, statusCode, level, etc...)
+      Object.getOwnPropertyNames(options).forEach((item) => {
+        self[item] = options[item];
       });
     }
   });
