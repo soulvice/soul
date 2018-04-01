@@ -7,16 +7,20 @@
 */
 
 
+import spdy from 'spdy'
+
 import utils from './utils'
 import errors from './errors'
 
 const debug = utils.Debug('server');
 
 export default class Server {
-  static OTPS = {
-    HTTP: 1,
-    HTTPS: 2
-  }
+  /*
+    options
+      host: [string]
+      port: [integer]
+      method: [Protocol - Default: http1]
+  */
 
   constructor(app=null, opts={}) {
     this._connections = {};
@@ -25,6 +29,7 @@ export default class Server {
     this._opts = {};
     this._opts.host = opts.host || '127.0.0.1';
     this._opts.port = opts.port || 3000;
+
     /*
       TODO:
         - add ssl/https support
@@ -40,7 +45,16 @@ export default class Server {
   async start() {
     const self = this;
     return new Promise((resolve, reject) => {
-      self._http = self._rootApp.listen(self._opts.port, self._opts.host);
+
+      const spdySrvr = spdy.createServer({
+        spdy: {
+          ssl: false, /* disable ssl - NOTE: implement ssl */
+          plain: false, /* ignore NPN and ALPN data, let server decide on what protocol to use from first packet */
+          protocols: [ 'h2', 'http/1.1', 'http.1.0' ]
+        }
+      }, self._rootApp);
+
+      self._http = spdySrvr.listen(self._opts.port, self._opts.host);
 
       self._http.on('listening', () => {
         debug(`:: server started on port ${self._opts.port} (${self._uuid})`);
@@ -65,7 +79,7 @@ export default class Server {
           svErr = errors.SoulError({
             message: `Address already in use (EADDRINUSE).`,
             context: `Address already in use on port ${self._opts.port}.`,
-            help: `Make sure there isn\'t already an instance of ${pkgName} running.`
+            help: `Make sure there is not already an instance of ${pkgName} running.`
           });
         }else{
           svErr = errors.SoulError({
