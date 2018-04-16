@@ -6,9 +6,6 @@
 
 */
 
-
-import spdy from 'spdy'
-
 import utils from './utils'
 import errors from './errors'
 
@@ -46,15 +43,7 @@ export default class Server {
     const self = this;
     return new Promise((resolve, reject) => {
 
-      const spdySrvr = spdy.createServer({
-        spdy: {
-          ssl: false, /* disable ssl - NOTE: implement ssl */
-          plain: false, /* ignore NPN and ALPN data, let server decide on what protocol to use from first packet */
-          protocols: [ 'h2', 'http/1.1', 'http.1.0' ]
-        }
-      }, self._rootApp);
-
-      self._http = spdySrvr.listen(self._opts.port, self._opts.host);
+      self._http = self._rootApp.listen(self._opts.port, self._opts.host);
 
       self._http.on('listening', () => {
         debug(`:: server started on port ${self._opts.port} (${self._uuid})`);
