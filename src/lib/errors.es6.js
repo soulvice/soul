@@ -8,8 +8,7 @@
 
 
 import { isString } from 'lodash';
-import uuid from 'node-uuid';
-
+import utils from './utils'
 export class SoulError extends Error {
   constructor(options) {
     super(options);
@@ -33,7 +32,7 @@ export class SoulError extends Error {
      this.errorType = 'InternalServerError';
      this.level = 'normal';
      this.message = 'The server has encountered an error.';
-     this.id = uuid.v1();
+     this.id = utils.uid(21);
 
     /**
      * custom overrides
