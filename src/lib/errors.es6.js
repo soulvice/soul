@@ -9,11 +9,11 @@
 
 import { isString } from 'lodash';
 import utils from './utils'
+
 export class SoulError extends Error {
-  constructor(options) {
+  constructor(options={}) {
     super(options);
 
-    options = options || {};
     var self = this;
     this.name = this.constructor.name;
     this.isSoulError = true;
