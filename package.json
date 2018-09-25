@@ -1,6 +1,6 @@
 {
   "name": "soul",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "the soul of the application",
   "main": "index.js",
   "scripts": {
@@ -27,14 +27,12 @@
     "archiver": "^1.3.0",
     "bunyan": "^1.8.9",
     "caller": "^1.0.1",
-    "crypto": "0.0.3",
     "debug": "^2.6.3",
     "find-root": "^1.0.0",
     "fs": "0.0.1-security",
     "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.4",
     "moment": "^2.19.3",
-    "node-uuid": "^1.4.7",
     "path": "^0.12.7",
     "prettyjson": "^1.2.1",
     "stream": "0.0.2",

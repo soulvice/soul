@@ -158,7 +158,7 @@ errors['SoulError'] = SoulError;
 
 Object.getOwnPropertyNames(_errorsTemplate).forEach((errorProp) => {
   errors['Soul'+errorProp] = (class extends SoulError {
-    constructor(options) {
+    constructor(options={}) {
       super(options);
 
       var self = this;
