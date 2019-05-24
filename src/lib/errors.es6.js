@@ -84,7 +84,7 @@ export class SoulError extends Error {
 				type: self.errorType,
 				status: self.statusCode,
 				message: self.message
-			};
+			}
 		};
 		if (!minimal) {
 			data.meta['id'] = self.id;
