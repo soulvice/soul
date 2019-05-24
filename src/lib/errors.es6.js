@@ -75,7 +75,26 @@ export class SoulError extends Error {
 
   static isSoulError(err) {
     return err.isSoulError ? true : false;
-  }
+	}
+
+	toJSON(minimal=true) {
+		const self = this;
+		const data = {
+			meta: {
+				type: self.errorType,
+				status: self.statusCode,
+				message: self.message
+			};
+		};
+		if (!minimal) {
+			data.meta['id'] = self.id;
+			data.meta['level'] = self.level;
+			data.meta['stack'] = self.stack;
+			data.meta['errorDetails'] = self.errorDetails;
+			data.meta['help'] = self.help;
+		}
+		return JSON.stringify(data);
+	}
 }
 
 let _errorsTemplate = {
@@ -143,7 +162,7 @@ let _errorsTemplate = {
   },
   MaintenanceError: {
     statusCode: 503,
-    message: 'The server is temporarily dow n for maintenance.'
+    message: 'The server is temporarily down for maintenance.'
   },
 }
 

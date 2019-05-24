@@ -1,52 +1,88 @@
 /*
-  Soul v2
+ *			STASH
+ *			@author: s0ul
+ *			@date: 13/05/2019
+ *
+ */
 
-  @author: Soulvice
-  @date: 10-07-2017
-
-*/
-
-import utils from './utils'
+import sio from 'socket.io'
+import utls from './utils'
 import errors from './errors'
+import http2 from 'http2'
+import { readFileSync, promises as fsPromise } from 'fs'
 
 const debug = utils.Debug('server');
 
-export default class Server {
-  /*
-    options
-      host: [string]
-      port: [integer]
-      method: [Protocol - Default: http1]
-  */
-
+export default class {
   constructor(app=null, opts={}) {
-    this._connections = {};
-    this._connectionId = 0;
+    const self = this;
 
-    this._opts = {};
-    this._opts.host = opts.host || '127.0.0.1';
-    this._opts.port = opts.port || 3000;
+    self._rootApp = app;
+    self._uuid = utils.uid(20);
 
-    /*
-      TODO:
-        - add ssl/https support
-    */
+    // host and port
+    self._host = opts.host || '127.0.0.1';
+    self._port = opts.port || 3000;
+    self._ssl = {};
+    self._ssl.key =  opts.ssl.key;
+    self._ssl.cert = opts.ssl.cert;
 
-    this._http = null;
-    this._rootApp = app;
+    // server
+    self._http = null;
+    self._connections = {};
+    self._connectionId = 0;
+    self._httpServer = null;
 
-    this._uuid = utils.uid(20);
+    //socket.io
+    self._enableSocketio = opts.enableSocketio || false;
+    self._socketio = null;
+
     debug(`:: new server created (${this._uuid})`);
   }
 
   async start() {
     const self = this;
+    let fSSLData = {};
+
+    /*
+      Read SSL Key and Certificate
+    */
+    try {
+      fSSLData.key = await fsPromise.readFile(self._ssl.key);
+      debug(`:: ssl key has been read`, `- key length ${fSSLData.key.length}`);
+    }catch (e) {
+      throw e;
+    }
+
+    try {
+      fSSLData.cert = await fsPromise.readFile(self._ssl.cert);
+      debug(`:: ssl cert has been read`, `- cert length ${fSSLData.cert.length}`);
+    }catch (e) {
+      throw e;
+    }
+
+    /*
+      Create Promise and start server creation
+    */
     return new Promise((resolve, reject) => {
+      self._http = http2.createSecureServer({
+        allowHTTP1: true,
+        ...fSSLData
+      }, self._rootApp.callback());
 
-      self._http = self._rootApp.listen(self._opts.port, self._opts.host);
+      debug(`:: created secure server  (${self._uuid})`);
 
+      // socket.io
+      if (self._enableSocketio) {
+        self._socketio = sio(self._http);
+      }
+
+      // listen
+      self._httpServer = self._http.listen(self._port, self._host);
+
+      // http
       self._http.on('listening', () => {
-        debug(`:: server started on port ${self._opts.port} (${self._uuid})`);
+        debug(`:: server started on port ${self._port} (${self._uuid})`);
         resolve(self);
       });
 
@@ -67,7 +103,7 @@ export default class Server {
           const pkgName = (utils.getPackageJSON && (utils.getPackageJSON.name || utils.getPackageJSON.alias)) || 'undefined';
           svErr = errors.SoulError({
             message: `Address already in use (EADDRINUSE).`,
-            context: `Address already in use on port ${self._opts.port}.`,
+            context: `Address already in use on port ${self._port}.`,
             help: `Make sure there is not already an instance of ${pkgName} running.`
           });
         }else{
@@ -85,6 +121,12 @@ export default class Server {
   async stop() {
     const self = this;
 
+    function closeSocketio() {
+      if (self._enableSocketio) {
+        self._socketio.close();
+      }
+    }
+
     return new Promise((resolve, reject) => {
       if (self._http !== null) {
         resolve(self);
@@ -97,6 +139,9 @@ export default class Server {
 
         self.closeConnections();
       }
+    }).then((selfID) => {
+      closeSocketio();
+      return selfID;
     });
   }
 
@@ -114,5 +159,9 @@ export default class Server {
         sock.destroy();
       }
     });
+  }
+
+  get socketio() {
+    return this._socketio;
   }
 }
