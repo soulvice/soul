@@ -43,10 +43,11 @@ export default class {
   async start() {
     const self = this;
     let fSSLData = {};
-
+		
     /*
       Read SSL Key and Certificate
-    */
+			*/
+		debug(`:: start reading ssl data`);
     try {
       fSSLData.key = await readFileSync(self._ssl.key);
       debug(`:: ssl key has been read`, `- key length ${fSSLData.key.length}`);
