@@ -48,16 +48,18 @@ export default class {
       Read SSL Key and Certificate
     */
     try {
-      fSSLData.key = await fsPromise.readFile(self._ssl.key);
+      fSSLData.key = await readFileSync(self._ssl.key);
       debug(`:: ssl key has been read`, `- key length ${fSSLData.key.length}`);
-    }catch (e) {
+		}catch (e) {
+			debug(`:: failed to read ssl key - ${self._ssl.key}`);
       throw e;
     }
 
     try {
-      fSSLData.cert = await fsPromise.readFile(self._ssl.cert);
+      fSSLData.cert = await readFileSync(self._ssl.cert);
       debug(`:: ssl cert has been read`, `- cert length ${fSSLData.cert.length}`);
-    }catch (e) {
+		}catch (e) {
+			debug(`:: failed to read ssl cert - ${self._ssl.cert}`);
       throw e;
     }
 
