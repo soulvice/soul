@@ -66,7 +66,8 @@ export default class {
     */
     return new Promise((resolve, reject) => {
       self._http = http2.createSecureServer({
-        allowHTTP1: true,
+				allowHTTP1: false,
+				secureProtocol: 'TLSv1.3',
         ...fSSLData
       }, self._rootApp.callback());
 
