@@ -6,7 +6,7 @@
  */
 
 import sio from 'socket.io'
-import utls from './utils'
+import utils from './utils'
 import errors from './errors'
 import http2 from 'http2'
 import { readFileSync, promises as fsPromise } from 'fs'
