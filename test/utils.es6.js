@@ -15,6 +15,19 @@ describe('#utils uid', () => {
 
 });
 
+describe('#utils uuidv4', () => {
+	let u1 = utils.uuidv4;
+	let u2 = utils.uuidv4;
+	console.log(u1, u2);
+	it('should be a string', () => {
+		expect(u1).to.be.a('string');
+		expect(u2).to.be.a('string');
+	});
+
+	it('should not be the same value', () => {
+		expect(u1).to.not.equal(u2);
+	});
+});
 
 describe('#utils version', () => {
   let ver = utils.VERSION;

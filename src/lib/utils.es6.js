@@ -48,6 +48,12 @@ external.uid = (len) => {
   return buf.join('');
 }
 
+Object.defineProperty(external, 'uuidv4', {
+	get: () => {
+		return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c => (c ^ crypto.randomFillSync(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
+	}
+});
+
 //external.generateAssetHash = () {
 //  return (crypto.createHash('md5').update(this.version.full + Date.now()).digest('hex')).substring(0, 10);
 //}
