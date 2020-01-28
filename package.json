@@ -1,27 +1,25 @@
 {
-  "name": "soul",
-  "version": "0.0.8",
-  "description": "the soul of the application",
+  "name": "vice",
+  "version": "0.1.0",
+  "description": "The vice of the application",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./test/* --require ./test/runtest.js",
-    "build": "babel src --out-dir dist --presets=es2015,stage-3 --plugins=transform-object-rest-spread,transform-async-to-generator,transform-class-properties,syntax-trailing-function-commas",
+    "build": "babel src --out-dir dist --presets=@babel/preset-react,@babel/preset-env --plugins=@babel/plugin-proposal-async-generator-functions",
     "build-clean": "rm -rf dist/*"
   },
-  "author": "Soulvice",
+  "author": "s0ul",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-core": "^6.24.0",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-plugin-syntax-trailing-function-commas": "^6.22.0",
-    "babel-plugin-transform-async-to-generator": "^6.22.0",
-    "babel-plugin-transform-class-properties": "^6.23.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-es2015": "^6.24.0",
-    "babel-preset-stage-3": "^6.22.0",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-async-generator-functions": "^7.8.3",
+    "@babel/polyfill": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-react": "^7.8.3",
+    "@babel/register": "^7.8.3",
     "chai": "^3.5.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.2.2"
   },
   "dependencies": {
     "archiver": "^1.3.0",
@@ -36,7 +34,7 @@
     "moment": "^2.24.0",
     "path": "^0.12.7",
     "prettyjson": "^1.2.1",
-    "socketio": "^1.0.0",
+    "socket.io": "^2.3.0",
     "stream": "0.0.2",
     "unidecode": "^0.1.8"
   }
